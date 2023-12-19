@@ -24,10 +24,6 @@ router.post('/signup', [
 
     try {
 
-        if (req.body.password != req.body.confirm_password) {
-            return res.json({ errors: { "confirm_password": "COnfirm password should be same as password" } });
-        }
-
         let user = await User.findOne({ email: req.body.email });
         // Check weather the user is already exist
         if (user) {
@@ -77,11 +73,11 @@ router.post('/login', [
             let user = await User.findOne({ email })
             // return error if user does not exist
             if (!user) {
-                return res.status(400).json({ "error": "Kindly login with correct credentials" })
+                return res.status(400).json({ errors: "Kindly login with correct credentials" })
             }
             const comparePass = await bcrypt.compare(password, user.password)
             if (!comparePass) {
-                return res.status(400).json({ "error": "Kindly login with correct credentials" })
+                return res.status(400).json({ errors: "Kindly login with correct credentials" })
             }
             const payload = {
                 user: {
